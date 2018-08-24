@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">SoundRecorder</string>
 
+    <!-- Action Bar Title text -->
+    <string name="action_bar_title">@string/app_name</string>
+
     <!-- An array containing the title of fragments shown in pager -->
     <string-array name="fragment_titles">
         <!-- Title of fragment to create new recording -->
@@ -8,5 +11,8 @@
         <!-- Title of fragment allowing browsing and playback of saved recordings -->
         <item>Saved</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

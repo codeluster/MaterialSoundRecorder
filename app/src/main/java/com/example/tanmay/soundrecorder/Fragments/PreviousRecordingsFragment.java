@@ -9,18 +9,22 @@ import android.view.ViewGroup;
 
 import com.example.tanmay.soundrecorder.R;
 
-public class RecordFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PreviousRecordingsFragment extends Fragment {
 
 
-    public RecordFragment() {
+    public PreviousRecordingsFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_record, container, false);
+        return inflater.inflate(R.layout.fragment_previous_recordings, container, false);
     }
 
 }

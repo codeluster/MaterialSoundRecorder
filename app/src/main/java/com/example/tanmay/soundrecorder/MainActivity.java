@@ -16,19 +16,33 @@ public class MainActivity extends AppCompatActivity {
 
     private class FragmentAdapter extends FragmentPagerAdapter{
 
+        // An array containing the list of titles
+        private String[] titles = getResources().getStringArray(R.array.fragment_titles);
 
+        // Constructor matching super
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        // Returns an instance of the required fragment
         @Override
-        public Fragment getItem(int i) {
+        public Fragment getItem(int position) {
+
+            switch (position){
+                case 0:
+                    //TODO Return a new Recording Fragment
+                    break;
+                case 1:
+                    //TODO Return a new File Viewing Fragment
+                    break;
+            }
+
             return null;
         }
 
         @Override
         public int getCount() {
-            return 0;
+            return titles.length;
         }
     }
 

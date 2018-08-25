@@ -24,10 +24,10 @@ public class RecordingsContract {
         public static final String TABLE_NAME = "recordings";
 
         public static final String _ID = BaseColumns._ID;
-        public static final String NAME = "name";
-        public static final String FILE_PATH = "path";
-        public static final String LENGTH = "length";
-        public static final String TIME = "time";
+        public static final String COLUMN_RECORDING_NAME = "name";
+        public static final String COLUMN_FILE_PATH = "path";
+        public static final String COLUMN_RECORDING_LENGTH = "length";
+        public static final String COLUMN_RECORDING_TIME = "time";
 
 
 

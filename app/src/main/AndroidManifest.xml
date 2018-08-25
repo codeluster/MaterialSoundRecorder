@@ -16,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Adding custom service to manifest -->
+        <service android:name=".Services.RecordingService" />
     </application>
 
 </manifest>

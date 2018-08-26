@@ -1,6 +1,8 @@
 package com.example.tanmay.soundrecorder.Data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -30,8 +32,7 @@ public class RecordingsProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, CancellationSignal cancellationSignal) {
-
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
         Cursor cursor;
 
@@ -41,8 +42,36 @@ public class RecordingsProvider extends ContentProvider {
                 break;
 
             case RECORDINGS_ID:
+                selection = RecordingsContract.RecordingsEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = database.query(RecordingsContract.RecordingsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
+            default:
+                throw new IllegalArgumentException("The provided Uri " + uri.toString() + " is not valid.");
 
         }
 
+        return cursor;
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        return null;
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues contentValues) {
+        return null;
+    }
+
+    @Override
+    public int delete(Uri uri, String s, String[] strings) {
+        return 0;
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+        return 0;
     }
 }

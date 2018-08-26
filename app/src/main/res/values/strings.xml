@@ -21,5 +21,8 @@
     <!-- Default file extension of a new recording -->
     <string name="default_file_directory" translatable="false">@string/app_name</string>
 
+    <!-- Toast message to inform user of recording started -->
+    <string name="prompt_recording_started">Recording Started</string>
+
 
 </resources>

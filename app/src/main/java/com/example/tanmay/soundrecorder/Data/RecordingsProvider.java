@@ -7,7 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.CancellationSignal;
+import android.util.Log;
 
 public class RecordingsProvider extends ContentProvider {
 
@@ -62,16 +62,96 @@ public class RecordingsProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+
+        switch (sUriMatcher.match(uri)) {
+            case RECORDINGS: {
+
+                SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+                long foo = database.insert(RecordingsContract.RecordingsEntry.TABLE_NAME, null, contentValues);
+
+                if (foo == -1) {
+                    Log.e(LOG_TAG, "Failed to insert row for " + uri.toString());
+                }
+
+            }
+            default:
+                throw new IllegalArgumentException("Insertion at provided Uri " + uri.toString() + " is not possible");
+        }
+
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
-        return 0;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        switch (sUriMatcher.match(uri)) {
+
+            case RECORDINGS:
+                int foo = deleteItem(selection, selectionArgs);
+                if (foo == 0) {
+                    Log.e(LOG_TAG, "Deletion failed for " + uri.toString());
+                }
+                break;
+
+
+            case RECORDINGS_ID:
+                selection = RecordingsContract.RecordingsEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                int goo = deleteItem(selection, selectionArgs);
+                if (goo == 0) {
+                    Log.e(LOG_TAG, "Deletion failed for " + uri.toString());
+                }
+
+            default:
+                throw new IllegalArgumentException("Deletion not supported for " + uri.toString());
+
+        }
+
+    }
+
+    private int deleteItem(String selection, String[] selectionArgs) {
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        return database.delete(RecordingsContract.RecordingsEntry.TABLE_NAME, selection, selectionArgs);
+
     }
 
     @Override
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+
+        if (contentValues.size() < 1) return -1;
+
+        switch (sUriMatcher.match(uri)) {
+
+            case RECORDINGS:
+                int foo = updateItem(contentValues, s, strings);
+                if (foo == 0) {
+                    Log.e(LOG_TAG, "Update failed for " + uri.toString());
+                } else return foo;
+                break;
+
+            case RECORDINGS_ID:
+                s = RecordingsContract.RecordingsEntry._ID + "=?";
+                strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                int goo = updateItem(contentValues, s, strings);
+                if (goo == 0) {
+                    Log.e(LOG_TAG, "Update failed for " + uri.toString());
+                } else return goo;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri.toString());
+        }
+
+        // Unreachable statement
+        return -1;
+
+    }
+
+    private int updateItem(ContentValues values, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        return database.update(RecordingsContract.RecordingsEntry.TABLE_NAME, values, selection, selectionArgs);
+
     }
 }

@@ -18,6 +18,12 @@
         </activity>
         <!-- Adding custom service to manifest -->
         <service android:name=".Services.RecordingService" />
+
+        <provider
+            android:name=".Data.RecordingsProvider"
+            android:authorities="com.example.tanmay.soundrecorder"
+            android:exported="false" />
+
     </application>
 
 </manifest>

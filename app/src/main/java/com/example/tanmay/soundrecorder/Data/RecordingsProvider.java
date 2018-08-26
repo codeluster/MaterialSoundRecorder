@@ -25,6 +25,13 @@ public class RecordingsProvider extends ContentProvider {
 
     private RecordingsDbHelper mDbHelper;
 
+    public int getCount() {
+
+        String[] projection = {RecordingsContract.RecordingsEntry._ID};
+
+        return query(RecordingsContract.RecordingsEntry.CONTENT_URI, projection, null, null, null).getCount();
+    }
+
     @Override
     public boolean onCreate() {
         mDbHelper = new RecordingsDbHelper(getContext());

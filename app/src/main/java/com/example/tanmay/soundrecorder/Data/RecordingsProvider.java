@@ -90,7 +90,7 @@ public class RecordingsProvider extends ContentProvider {
                 int foo = deleteItem(selection, selectionArgs);
                 if (foo == 0) {
                     Log.e(LOG_TAG, "Deletion failed for " + uri.toString());
-                }
+                } else return foo;
                 break;
 
 
@@ -100,12 +100,15 @@ public class RecordingsProvider extends ContentProvider {
                 int goo = deleteItem(selection, selectionArgs);
                 if (goo == 0) {
                     Log.e(LOG_TAG, "Deletion failed for " + uri.toString());
-                }
+                } else return goo;
 
             default:
                 throw new IllegalArgumentException("Deletion not supported for " + uri.toString());
 
         }
+
+        // Unreachable statement
+        return 0;
 
     }
 

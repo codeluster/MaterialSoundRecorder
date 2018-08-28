@@ -62,7 +62,7 @@ public class RecordingService extends Service {
         // Set the audio encoder
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         // Set the audio channels
-        mRecorder.setAudioChannels(2);
+        mRecorder.setAudioChannels(1);
 
         // Set the bitrate based on user preferences
         if (UserPreferences.Quality.getQualityPref(this)) {
@@ -96,7 +96,7 @@ public class RecordingService extends Service {
             // Gets the number of items in the database as the least number in  preexisting filename
             // but still need to add a counter and check because if say My Recording_3 is deleted
             // number of items in databse is reduced but there still exists recording such as #4, #5 etc...
-            filename.append(new RecordingsProvider().getCount() + counter);
+            filename.append(/*new RecordingsProvider().getCount() +*/  counter);
             filename.append(getString(R.string.default_file_extension));
             mFileName = filename.toString();
 

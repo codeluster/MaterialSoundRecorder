@@ -24,5 +24,10 @@
     <!-- Toast message to inform user of recording started -->
     <string name="prompt_recording_started">Recording Started</string>
 
+    <!-- Title of prefernce to enable recording in high quality -->
+    <string name="pref_high_quality_title">Enable High Quality Recording</string>
+
+    <!-- Summary of prefernce to enable recording in high quality -->
+    <string name="pref_high_quality_summary">Record in CD Quality</string>
 
 </resources>

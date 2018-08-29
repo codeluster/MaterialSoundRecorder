@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="pref_high_quality_key" translatable="false">pref_high_quality</string>
+
     <integer name="high_quality_sampling_rate">44100</integer>
     <integer name="high_quality_encoding_bitrate">192000</integer>
 </resources>

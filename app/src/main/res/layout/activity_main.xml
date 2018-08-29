@@ -6,11 +6,13 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".Actvities.MainActivity">
+<!--
 
     <android.support.v7.widget.Toolbar
         app:title="@string/action_bar_title"
         app:titleTextColor="@color/actionBarTextColor"
        style="@style/Widget.Tanmay.ActionBar"/>
+-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/fragments_view_pager"

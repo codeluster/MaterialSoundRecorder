@@ -30,4 +30,7 @@
     <!-- Summary of prefernce to enable recording in high quality -->
     <string name="pref_high_quality_summary">Record in CD Quality</string>
 
+    <!-- Menu option shown in overflow menu of main activity -->
+    <string name="action_open_settings_title">Settings</string>
+
 </resources>

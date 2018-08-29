@@ -5,4 +5,7 @@
 
     <integer name="high_quality_sampling_rate">44100</integer>
     <integer name="high_quality_encoding_bitrate">192000</integer>
+
+    <integer name="low_quality_sampling_rate">24100</integer>
+    <integer name="low_quality_encoding_bitrate">80000</integer>
 </resources>

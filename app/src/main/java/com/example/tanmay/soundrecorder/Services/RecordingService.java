@@ -21,6 +21,8 @@ import java.io.IOException;
 
 public class RecordingService extends Service {
 
+    private static final String LOG_TAG = RecordingService.class.getSimpleName();
+
     // Name of recording
     private String mFileName;
     // Path of recording
@@ -30,8 +32,6 @@ public class RecordingService extends Service {
 
     private long mStartingTimeMillis;
     private long mElapsedTimeMillis;
-
-    private static final String LOG_TAG = RecordingService.class.getSimpleName();
 
     @Nullable
     @Override
@@ -68,6 +68,9 @@ public class RecordingService extends Service {
         if (UserPreferences.Quality.getQualityPref(this)) {
             mRecorder.setAudioSamplingRate(getResources().getInteger(R.integer.high_quality_sampling_rate));
             mRecorder.setAudioEncodingBitRate(getResources().getInteger(R.integer.high_quality_encoding_bitrate));
+        }else {
+            mRecorder.setAudioSamplingRate(getResources().getInteger(R.integer.low_quality_sampling_rate));
+            mRecorder.setAudioEncodingBitRate(getResources().getInteger(R.integer.low_quality_encoding_bitrate));
         }
 
         try {

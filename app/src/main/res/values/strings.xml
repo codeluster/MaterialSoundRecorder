@@ -33,4 +33,7 @@
     <!-- Menu option shown in overflow menu of main activity -->
     <string name="action_open_settings_title">Settings</string>
 
+    <!-- Dialog message when record audio permission denied -->
+    <string name="audio_perm_denied_message">Permission is required to record audio</string>
+
 </resources>

@@ -46,6 +46,14 @@ public class RecordingService extends Service {
         return START_NOT_STICKY;
     }
 
+    @Override
+    public void onDestroy() {
+
+        if (mRecorder != null) stopRecording();
+
+        super.onDestroy();
+    }
+
     private void startRecording() {
 
         // Creates a new filename and path and updates global variables
@@ -68,7 +76,7 @@ public class RecordingService extends Service {
         if (UserPreferences.Quality.getQualityPref(this)) {
             mRecorder.setAudioSamplingRate(getResources().getInteger(R.integer.high_quality_sampling_rate));
             mRecorder.setAudioEncodingBitRate(getResources().getInteger(R.integer.high_quality_encoding_bitrate));
-        }else {
+        } else {
             mRecorder.setAudioSamplingRate(getResources().getInteger(R.integer.low_quality_sampling_rate));
             mRecorder.setAudioEncodingBitRate(getResources().getInteger(R.integer.low_quality_encoding_bitrate));
         }

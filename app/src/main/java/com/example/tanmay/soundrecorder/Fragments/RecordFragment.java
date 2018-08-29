@@ -2,6 +2,7 @@ package com.example.tanmay.soundrecorder.Fragments;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,9 +26,14 @@ import java.io.File;
 
 public class RecordFragment extends Fragment {
 
-    Chronometer chronometer;
-    FloatingActionButton fab;
-    private final int AUDIO_PERM_REQUEST_CODE = 2803;
+    private Chronometer chronometer;
+    private FloatingActionButton fab;
+    private final int REQUEST_PERM_AUDIO_CODE = 2803;
+    private final int REQUEST_PERM_WRITE_EXT_CODE = 6233;
+    private Intent service;
+
+    // Track if currently recording (true) or not (false)
+    private boolean mRecording = false;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -46,12 +52,16 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // Check for permission before starting recording
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_PERM_REQUEST_CODE);
-                } else onStartRecording();
+                if (!mRecording) {
+                    // Check for permission before starting recording
+                    if (getPermissions()) onStartRecording();
+                } else onPauseRecording();
+                /*else onPauseRecording();*/
+
+                toggleFab();
             }
         });
+
 
         return v;
     }
@@ -60,7 +70,7 @@ public class RecordFragment extends Fragment {
     private void onStartRecording() {
 
         // Intent to launch service
-        Intent service = new Intent(getActivity(), RecordingService.class);
+        service = new Intent(getActivity(), RecordingService.class);
 
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.default_file_directory));
         // Create folder if it doesn't exist
@@ -73,20 +83,59 @@ public class RecordFragment extends Fragment {
         // Inform the user
         Toast.makeText(getActivity(), getString(R.string.prompt_recording_started), Toast.LENGTH_SHORT).show();
 
+        mRecording = true;
+    }
+
+    private void onPauseRecording() {
+
+        getActivity().stopService(service);
+
+        mRecording = false;
+
+    }
+
+    // Since toggleFab is executed after on(Start/Pause)Recording it uses the updated value of mRecording
+    private void toggleFab() {
+
+        if (mRecording) {
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_white_24dp));
+        } else {
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
+        }
+    }
+
+    private boolean getPermissions() {
+
+
+        Activity activity = getActivity();
+
+        boolean record_audio = ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        boolean write_ext_storage = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (!record_audio)
+            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_PERM_AUDIO_CODE);
+
+        if (!write_ext_storage)
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERM_WRITE_EXT_CODE);
+
+        return record_audio && write_ext_storage;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case AUDIO_PERM_REQUEST_CODE:
+            case REQUEST_PERM_AUDIO_CODE:
+
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted
+
+                    //Check if all other permissions also granted
+                    getPermissions();
                     // Start recording
                     onStartRecording();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    builder.setMessage(R.string.audio_perm_denied_message)
+                    builder.setMessage(R.string.runtime_permissions_denied_message)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -95,7 +144,33 @@ public class RecordFragment extends Fragment {
                             }).show();
 
                 }
-                return;
+
+                break;
+
+
+            case REQUEST_PERM_WRITE_EXT_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    //Check if all other permissions also granted
+                    getPermissions();
+                    // Start recording
+                    onStartRecording();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    builder.setMessage(R.string.runtime_permissions_denied_message)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (dialog != null) dialog.dismiss();
+                                }
+                            }).show();
+
+                }
+
+                break;
+
+
         }
     }
 }

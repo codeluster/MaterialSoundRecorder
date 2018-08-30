@@ -7,5 +7,10 @@
             android:id="@+id/action_open_settings"
             android:orderInCategory="101"
             android:title="@string/action_open_settings_title" />
+        <item
+            android:id="@+id/action_open_test_activity"
+            android:enabled="true"
+            android:orderInCategory="102"
+            android:title="Open Test"/>
     </group>
 </menu>

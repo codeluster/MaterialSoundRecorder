@@ -14,7 +14,7 @@ import static com.example.tanmay.soundrecorder.Data.RecordingsContract.Recording
 
 public class RecordingsDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "materialSoundRecorder.db";
+    private static final String DATABASE_NAME = "metadata.db";
     private static final int DATABASE_VERSION = 1;
 
     RecordingsDbHelper(Context context) {
@@ -27,9 +27,9 @@ public class RecordingsDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " ("
                 + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_RECORDING_NAME + " TEXT NOT NULL, "
-                + COLUMN_FILE_PATH + "TEXT, "
-                + COLUMN_RECORDING_LENGTH + " INTEGER ,"
-                + COLUMN_RECORDING_TIME + " INTEGER " + ")";
+                + COLUMN_FILE_PATH + "TEXT NOT NULL, "
+                + COLUMN_RECORDING_LENGTH + " INTEGER DEFAULT 0,"
+                + COLUMN_RECORDING_TIME + " INTEGER DEFAULT 0" + ")";
 
         sqLiteDatabase.execSQL(SQL_CREATE_ENTRIES);
 

@@ -30,7 +30,8 @@
             android:authorities="com.example.tanmay.soundrecorder"
             android:exported="false" />
 
-        <activity android:name=".Actvities.SettingsActivity"></activity>
+        <activity android:name=".Actvities.SettingsActivity" />
+        <activity android:name=".Actvities.TestActivity"></activity>
     </application>
 
 </manifest>

@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_open_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
+            case R.id.action_open_test_activity:
+                startActivity(new Intent(MainActivity.this, TestActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

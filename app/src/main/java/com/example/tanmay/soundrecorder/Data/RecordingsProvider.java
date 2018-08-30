@@ -19,8 +19,8 @@ public class RecordingsProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(RecordingsContract.CONTENT_AUTHORITY, RecordingsContract.PATH_RECORDINGS, RECORDINGS);
-        sUriMatcher.addURI(RecordingsContract.CONTENT_AUTHORITY, RecordingsContract.PATH_RECORDINGS + "/#", RECORDINGS_ID);
+        sUriMatcher.addURI(RecordingsContract.RecordingsEntry.RECORDINGS_CONTENT_AUTHORITY, RecordingsContract.PATH_RECORDINGS, RECORDINGS);
+        sUriMatcher.addURI(RecordingsContract.RecordingsEntry.RECORDINGS_CONTENT_AUTHORITY, RecordingsContract.PATH_RECORDINGS + "/#", RECORDINGS_ID);
     }
 
     private RecordingsDbHelper mDbHelper;

@@ -14,31 +14,41 @@ import static com.example.tanmay.soundrecorder.Data.RecordingsContract.Recording
 
 public class RecordingsDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "metadata.db";
+    private static final String DATABASE_NAME = "recordings.db";
     private static final int DATABASE_VERSION = 1;
 
     RecordingsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+
+    private static final String SQL_CREATE_ENTRIES =
+            "CREATE TABLE " + TABLE_NAME + " ("
+                    + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COLUMN_RECORDING_NAME + " TEXT NOT NULL, "
+                    + COLUMN_FILE_PATH + "TEXT NOT NULL, "
+                    + COLUMN_RECORDING_LENGTH + " INTEGER DEFAULT 0,"
+                    + COLUMN_RECORDING_TIME + " INTEGER DEFAULT 0" + ")";
+    private static final String SQL_DELETE_ENTRIES =
+            "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-        String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " ("
-                + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_RECORDING_NAME + " TEXT NOT NULL, "
-                + COLUMN_FILE_PATH + "TEXT NOT NULL, "
-                + COLUMN_RECORDING_LENGTH + " INTEGER DEFAULT 0,"
-                + COLUMN_RECORDING_TIME + " INTEGER DEFAULT 0" + ")";
-
         sqLiteDatabase.execSQL(SQL_CREATE_ENTRIES);
-
     }
-
 
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        // First delete the old database
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(sqLiteDatabase);
     }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
+    }
+
 }

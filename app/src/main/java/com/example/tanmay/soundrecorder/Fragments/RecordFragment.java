@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
@@ -29,17 +32,25 @@ public class RecordFragment extends Fragment {
 
     private String LOG_TAG;
 
-    private Chronometer chronometer;
-    private FloatingActionButton fab;
     private final int REQUEST_PERM_AUDIO_CODE = 2803;
     private final int REQUEST_PERM_WRITE_EXT_CODE = 6233;
     private Intent service;
-
+    private Activity activity;
     // Track if currently recording (true) or not (false)
     private boolean mRecording = false;
 
+    private Chronometer mChronometer;
+    private FloatingActionButton fab;
+
     public RecordFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        activity = getActivity();
     }
 
     @Override
@@ -51,15 +62,8 @@ public class RecordFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_record, container, false);
 
-        chronometer = v.findViewById(R.id.recording_chronometer);
+        mChronometer = v.findViewById(R.id.recording_chronometer);
         fab = v.findViewById(R.id.toogle_recording_fab);
-
-        activateFAB();
-
-        return v;
-    }
-
-    private void activateFAB() {
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +83,9 @@ public class RecordFragment extends Fragment {
 
             }
         });
-    }
 
+        return v;
+    }
 
     private void onStartRecording() {
 
@@ -97,16 +102,20 @@ public class RecordFragment extends Fragment {
         }
 
         // Start recording
-        getActivity().startService(service);
+        activity.startService(service);
 
-        Log.d(LOG_TAG, "Service launched successfully.");
+        // Reset the chronometer
+        mChronometer.setBase(SystemClock.elapsedRealtime());
+        // Start the chronometer
+        mChronometer.start();
 
         // Inform the user
         Toast.makeText(getActivity(), getString(R.string.prompt_recording_started), Toast.LENGTH_SHORT).show();
 
         mRecording = true;
 
-        activateFAB();
+        // Prevent the screen from timing out and turning off
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 
@@ -114,7 +123,13 @@ public class RecordFragment extends Fragment {
 
         getActivity().stopService(service);
 
+        // Stop the chronometer
+        mChronometer.stop();
+
         mRecording = false;
+
+        // Allow the screen to timeout and turn off
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 

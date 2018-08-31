@@ -26,7 +26,7 @@ public class RecordingsDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_NAME + " ("
                     + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + COLUMN_RECORDING_NAME + " TEXT NOT NULL, "
-                    + COLUMN_FILE_PATH + "TEXT NOT NULL, "
+                    + COLUMN_FILE_PATH + " TEXT NOT NULL, "
                     + COLUMN_RECORDING_LENGTH + " INTEGER DEFAULT 0,"
                     + COLUMN_RECORDING_TIME + " INTEGER DEFAULT 0" + ")";
     private static final String SQL_DELETE_ENTRIES =

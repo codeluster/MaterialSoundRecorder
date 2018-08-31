@@ -70,21 +70,19 @@ public class RecordingsProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
 
-        switch (sUriMatcher.match(uri)) {
-            case RECORDINGS: {
 
-                SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        if (sUriMatcher.match(uri) != RECORDINGS)
+            throw new IllegalArgumentException("Insertion at provided Uri " + uri.toString() + " is not possible");
 
-                long foo = database.insert(RecordingsContract.RecordingsEntry.TABLE_NAME, null, contentValues);
 
-                if (foo == -1) {
-                    Log.e(LOG_TAG, "Failed to insert row for " + uri.toString());
-                }
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-            }
-            default:
-                throw new IllegalArgumentException("Insertion at provided Uri " + uri.toString() + " is not possible");
-        }
+        long foo = database.insert(RecordingsContract.RecordingsEntry.TABLE_NAME, null, contentValues);
+
+        if (foo == -1) Log.e(LOG_TAG, "Failed to insert row for " + uri.toString());
+
+        return ContentUris.withAppendedId(uri, foo);
+
 
     }
 

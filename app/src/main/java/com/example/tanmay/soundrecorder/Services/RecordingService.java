@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
@@ -59,12 +60,14 @@ public class RecordingService extends Service {
         // Creates a new filename and path and updates global variables
         setFileNameAndPath();
 
+        Log.d(LOG_TAG, getCount() + "");
+
         // A MediaRecorder is used to record audio and video
         mRecorder = new MediaRecorder();
         // Set input from the device microphone
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         // Set the output format to mp4
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
         // Set the output file to store recording
         mRecorder.setOutputFile(mFilePath);
         // Set the audio encoder
@@ -93,6 +96,17 @@ public class RecordingService extends Service {
 
     }
 
+    private int getCount() {
+
+        Cursor cursor = getContentResolver().query(RecordingsContract.RecordingsEntry.CONTENT_URI, new String[]{RecordingsContract.RecordingsEntry._ID}, null, null, null);
+
+        int count = cursor.getCount();
+
+        cursor.close();
+
+        return count;
+    }
+
     /* Each new file is named as for eg. /SoundRecorder/My Recording_4.mp4
      * By checking if My_Recording_3.mp4 exists that filename is skipped*/
     private void setFileNameAndPath() {
@@ -102,12 +116,15 @@ public class RecordingService extends Service {
         File file;
 
         do {
+
+            counter++;
+
             StringBuilder filename = new StringBuilder(getString(R.string.default_file_name));
             filename.append("_");
             // Gets the number of items in the database as the least number in  preexisting filename
             // but still need to add a counter and check because if say My Recording_3 is deleted
             // number of items in databse is reduced but there still exists recording such as #4, #5 etc...
-            filename.append(/*new RecordingsProvider().getCount() +*/  counter);
+            filename.append(getCount() + counter);
             filename.append(getString(R.string.default_file_extension));
             mFileName = filename.toString();
 

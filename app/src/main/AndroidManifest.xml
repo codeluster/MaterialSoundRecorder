@@ -26,12 +26,23 @@
         <service android:name=".Services.RecordingService" />
 
         <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.tanmay.soundrecorder.Data.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <!-- Custom file provider to store recording metadata -->
+        <provider
             android:name=".Data.RecordingsProvider"
             android:authorities="com.example.tanmay.soundrecorder.Data.RecordingsProvider"
             android:exported="false" />
 
         <activity android:name=".Actvities.SettingsActivity" />
-        <activity android:name=".Actvities.TestActivity"/>
+        <activity android:name=".Actvities.TestActivity" />
     </application>
 
 </manifest>

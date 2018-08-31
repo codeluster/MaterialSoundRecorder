@@ -16,7 +16,7 @@
     <string name="default_file_name" translatable="false">My Recording</string>
 
     <!-- Default file extension of a new recording -->
-    <string name="default_file_extension" translatable="false">.mp4</string>
+    <string name="default_file_extension" translatable="false">.aac</string>
 
     <!-- Default file extension of a new recording -->
     <string name="default_file_directory" translatable="false">@string/app_name</string>

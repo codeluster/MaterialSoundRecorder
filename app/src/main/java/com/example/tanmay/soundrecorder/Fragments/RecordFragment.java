@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import com.example.tanmay.soundrecorder.Services.RecordingService;
 import java.io.File;
 
 public class RecordFragment extends Fragment {
+
+    private String LOG_TAG;
 
     private Chronometer chronometer;
     private FloatingActionButton fab;
@@ -42,28 +45,40 @@ public class RecordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        LOG_TAG = RecordFragment.class.getSimpleName();
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_record, container, false);
 
         chronometer = v.findViewById(R.id.recording_chronometer);
         fab = v.findViewById(R.id.toogle_recording_fab);
 
+        activateFAB();
+
+        return v;
+    }
+
+    private void activateFAB() {
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                toggleFab();
+
                 if (!mRecording) {
                     // Check for permission before starting recording
-                    if (getPermissions()) onStartRecording();
+                    if (getPermissions()) {
+                        onStartRecording();
+                        Log.d(LOG_TAG, "Beginning recording...");
+                    } else {
+                        Log.d(LOG_TAG, "Recording cancelled. Lacking necessary permissions.");
+                    }
                 } else onPauseRecording();
-                /*else onPauseRecording();*/
 
-                toggleFab();
             }
         });
-
-
-        return v;
     }
 
 
@@ -72,18 +87,27 @@ public class RecordFragment extends Fragment {
         // Intent to launch service
         service = new Intent(getActivity(), RecordingService.class);
 
-        File folder = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.default_file_directory));
+        String pathname = Environment.getExternalStorageDirectory() + "/" + getString(R.string.default_file_directory);
+
+        File folder = new File(pathname);
         // Create folder if it doesn't exist
         if (!folder.exists()) {
             folder.mkdir();
+            Log.d(LOG_TAG, "Folder didn't exist. Created : " + pathname);
         }
 
         // Start recording
         getActivity().startService(service);
+
+        Log.d(LOG_TAG, "Service launched successfully.");
+
         // Inform the user
         Toast.makeText(getActivity(), getString(R.string.prompt_recording_started), Toast.LENGTH_SHORT).show();
 
         mRecording = true;
+
+        activateFAB();
+
     }
 
     private void onPauseRecording() {
@@ -94,10 +118,9 @@ public class RecordFragment extends Fragment {
 
     }
 
-    // Since toggleFab is executed after on(Start/Pause)Recording it uses the updated value of mRecording
     private void toggleFab() {
 
-        if (mRecording) {
+        if (!mRecording) {
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_white_24dp));
         } else {
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
@@ -142,6 +165,8 @@ public class RecordFragment extends Fragment {
                                     if (dialog != null) dialog.dismiss();
                                 }
                             }).show();
+
+                    return;
 
                 }
 

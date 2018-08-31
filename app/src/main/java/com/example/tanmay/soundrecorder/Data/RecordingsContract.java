@@ -11,7 +11,7 @@ public class RecordingsContract {
     private RecordingsContract() {
     }
 
-    public static final String CONTENT_AUTHORITY = "com.example.tanmay.recorder";
+    public static final String CONTENT_AUTHORITY = "com.example.tanmay.soundrecorder";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_RECORDINGS = RecordingsEntry.TABLE_NAME;

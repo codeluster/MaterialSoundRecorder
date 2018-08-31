@@ -31,7 +31,7 @@
             android:exported="false" />
 
         <activity android:name=".Actvities.SettingsActivity" />
-        <activity android:name=".Actvities.TestActivity"></activity>
+        <activity android:name=".Actvities.TestActivity"/>
     </application>
 
 </manifest>

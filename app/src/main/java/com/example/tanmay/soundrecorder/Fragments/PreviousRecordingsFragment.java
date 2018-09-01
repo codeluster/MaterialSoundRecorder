@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import com.example.tanmay.soundrecorder.Data.RecordingsContract;
 import com.example.tanmay.soundrecorder.R;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -110,13 +110,14 @@ public class PreviousRecordingsFragment extends Fragment implements LoaderManage
             super(context, c);
         }
 
-        private String millisToHMS(int lengthInMillis) {
+        private String getRecordingLength(int lengthInMillis) {
 
             Integer secs = lengthInMillis / 1000;
             Integer mins = secs / 60;
             secs %= 60;
             Integer hours = mins / 60;
             mins %= 60;
+
 
             String time = secs.toString() + " s";
 
@@ -142,14 +143,17 @@ public class PreviousRecordingsFragment extends Fragment implements LoaderManage
                 TextView time = view.findViewById(R.id.recordings_list_item_time);
 
                 title.setText(cursor.getString(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_NAME)));
-                length.setText(millisToHMS(cursor.getInt(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_LENGTH))));
+                length.setText(getRecordingLength(cursor.getInt(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_LENGTH))));
 
-                Date fDate = new Date(cursor.getInt(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_TIME)));
-                DateFormat format = DateFormat.getDateTimeInstance();
-                format.setTimeZone(TimeZone.getTimeZone("UTC"));
-                String formattedDate = format.format(fDate);
+                int rTime = cursor.getInt(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_TIME));
 
-                time.setText(formattedDate);
+                date.setText(DateUtils.formatDateTime(context,
+                        rTime,
+                        DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE));
+
+                time.setText(DateUtils.formatDateTime(context,
+                        rTime,
+                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_ABBREV_TIME));
 
 
             }

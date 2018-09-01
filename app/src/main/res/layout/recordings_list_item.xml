@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/recordings_list_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_alignParentStart="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:hint="My Recording 12.mp4" />
+
+    <TextView
+        android:id="@+id/recordings_list_item_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/recordings_list_item_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        tools:hint="01:38" />
+
+    <TextView
+        android:id="@+id/recordings_list_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        tools:hint="15/9/2018" />
+
+    <TextView
+        android:id="@+id/recordings_list_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/recordings_list_item_date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        tools:hint="11:47 AM" />
+
+
+
+
+</RelativeLayout>

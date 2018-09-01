@@ -35,5 +35,6 @@
 
     <!-- Dialog message when permissions denied during runtime -->
     <string name="runtime_permissions_denied_message">These permissions are required for application to function</string>
+    <string name="no_previous_recordings_message">There are no previous recordings to display.</string>
 
 </resources>

@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Adding custom service to manifest -->
+
+        <!-- Service to record audio -->
         <service android:name=".Services.RecordingService" />
 
         <provider

@@ -4,10 +4,16 @@ package com.example.tanmay.soundrecorder.Fragments;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,11 +26,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class PreviousRecordingsFragment extends Fragment {
+public class PreviousRecordingsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    // Identifier for data loader
+    private static final int REC_LOADER = 214;
 
     ListView listView;
     Context context;
 
+    RecordingsAdapter adapter;
 
     public PreviousRecordingsFragment() {
         // Required empty public constructor
@@ -42,6 +52,27 @@ public class PreviousRecordingsFragment extends Fragment {
 
         context = getContext();
 
+        adapter = new RecordingsAdapter(context, null);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+            }
+        });
+
+        getLoaderManager().initLoader(REC_LOADER, null, this);
+
+        return v;
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+
         String[] projection = new String[]{
                 RecordingsContract.RecordingsEntry._ID,
                 RecordingsContract.RecordingsEntry.COLUMN_RECORDING_NAME,
@@ -49,11 +80,27 @@ public class PreviousRecordingsFragment extends Fragment {
                 RecordingsContract.RecordingsEntry.COLUMN_RECORDING_TIME
         };
 
-        Cursor allRecordings = context.getContentResolver().query(RecordingsContract.RecordingsEntry.CONTENT_URI, null, null, null, null);
+        return new CursorLoader(context,
+                RecordingsContract.RecordingsEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
 
-        listView.setAdapter(new RecordingsAdapter(context, allRecordings));
+    }
 
-        return v;
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+
+        adapter.swapCursor(cursor);
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
+        adapter.swapCursor(null);
+
     }
 
     private class RecordingsAdapter extends CursorAdapter {

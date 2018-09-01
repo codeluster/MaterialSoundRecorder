@@ -52,6 +52,7 @@ public class RecordingsProvider extends ContentProvider {
 
         }
 
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -74,6 +75,8 @@ public class RecordingsProvider extends ContentProvider {
 
         if (foo == -1) Log.e(LOG_TAG, "Failed to insert row for " + uri.toString());
 
+        getContext().getContentResolver().notifyChange(uri, null);
+
         return ContentUris.withAppendedId(uri, foo);
 
 
@@ -88,7 +91,10 @@ public class RecordingsProvider extends ContentProvider {
                 int foo = deleteItem(selection, selectionArgs);
                 if (foo == 0) {
                     Log.e(LOG_TAG, "Deletion failed for " + uri.toString());
-                } else return foo;
+                } else {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return foo;
+                }
                 break;
 
 
@@ -98,7 +104,10 @@ public class RecordingsProvider extends ContentProvider {
                 int goo = deleteItem(selection, selectionArgs);
                 if (goo == 0) {
                     Log.e(LOG_TAG, "Deletion failed for " + uri.toString());
-                } else return goo;
+                } else {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return goo;
+                }
 
             default:
                 throw new IllegalArgumentException("Deletion not supported for " + uri.toString());
@@ -128,7 +137,10 @@ public class RecordingsProvider extends ContentProvider {
                 int foo = updateItem(contentValues, s, strings);
                 if (foo == 0) {
                     Log.e(LOG_TAG, "Update failed for " + uri.toString());
-                } else return foo;
+                } else {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return foo;
+                }
                 break;
 
             case RECORDINGS_ID:
@@ -137,7 +149,10 @@ public class RecordingsProvider extends ContentProvider {
                 int goo = updateItem(contentValues, s, strings);
                 if (goo == 0) {
                     Log.e(LOG_TAG, "Update failed for " + uri.toString());
-                } else return goo;
+                } else {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return goo;
+                }
                 break;
 
             default:

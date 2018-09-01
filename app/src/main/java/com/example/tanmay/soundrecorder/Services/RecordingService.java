@@ -104,8 +104,8 @@ public class RecordingService extends Service {
         return count;
     }
 
-    /* Each new file is named as for eg. /SoundRecorder/My Recording_4.mp4
-     * By checking if My_Recording_3.mp4 exists that filename is skipped*/
+    /*   *//* Each new file is named as for eg. /SoundRecorder/My Recording_4.mp4
+     * By checking if My_Recording_3.mp4 exists that filename is skipped*//*
     private void setFileNameAndPath() {
 
         int counter = 0;
@@ -138,6 +138,20 @@ public class RecordingService extends Service {
         }
         // This is true while there already exists a file at the location
         while (file.exists() && !file.isDirectory());
+
+    }
+*/
+
+    private void setFileNameAndPath() {
+
+        mFileName = getString(R.string.default_file_name) + " " + Long.toString(System.currentTimeMillis()) + getString(R.string.default_file_extension);
+
+        StringBuilder filepath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath());
+        filepath.append("/");
+        filepath.append(getString(R.string.default_file_directory));
+        filepath.append("/");
+        filepath.append(mFileName);
+        mFilePath = filepath.toString();
 
     }
 

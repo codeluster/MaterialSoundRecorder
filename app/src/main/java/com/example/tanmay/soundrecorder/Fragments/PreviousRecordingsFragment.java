@@ -15,6 +15,11 @@ import android.widget.TextView;
 import com.example.tanmay.soundrecorder.Data.RecordingsContract;
 import com.example.tanmay.soundrecorder.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class PreviousRecordingsFragment extends Fragment {
 
     ListView listView;
@@ -37,6 +42,13 @@ public class PreviousRecordingsFragment extends Fragment {
 
         context = getContext();
 
+        String[] projection = new String[]{
+                RecordingsContract.RecordingsEntry._ID,
+                RecordingsContract.RecordingsEntry.COLUMN_RECORDING_NAME,
+                RecordingsContract.RecordingsEntry.COLUMN_RECORDING_LENGTH,
+                RecordingsContract.RecordingsEntry.COLUMN_RECORDING_TIME
+        };
+
         Cursor allRecordings = context.getContentResolver().query(RecordingsContract.RecordingsEntry.CONTENT_URI, null, null, null, null);
 
         listView.setAdapter(new RecordingsAdapter(context, allRecordings));
@@ -51,6 +63,22 @@ public class PreviousRecordingsFragment extends Fragment {
             super(context, c);
         }
 
+        private String millisToHMS(int lengthInMillis) {
+
+            Integer secs = lengthInMillis / 1000;
+            Integer mins = secs / 60;
+            secs %= 60;
+            Integer hours = mins / 60;
+            mins %= 60;
+
+            String time = secs.toString() + " s";
+
+            if (mins > 0) time = mins.toString() + " m " + time;
+            if (hours > 0) time = hours.toString() + " h " + time;
+
+            return time;
+        }
+
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             return LayoutInflater.from(context).inflate(R.layout.recordings_list_item, parent, false);
@@ -59,7 +87,7 @@ public class PreviousRecordingsFragment extends Fragment {
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
 
-            while (cursor.moveToNext()) {
+            if (cursor.getCount() > 0) {
 
                 TextView title = view.findViewById(R.id.recordings_list_item_title);
                 TextView length = view.findViewById(R.id.recordings_list_item_length);
@@ -67,6 +95,15 @@ public class PreviousRecordingsFragment extends Fragment {
                 TextView time = view.findViewById(R.id.recordings_list_item_time);
 
                 title.setText(cursor.getString(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_NAME)));
+                length.setText(millisToHMS(cursor.getInt(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_LENGTH))));
+
+                Date fDate = new Date(cursor.getInt(cursor.getColumnIndexOrThrow(RecordingsContract.RecordingsEntry.COLUMN_RECORDING_TIME)));
+                DateFormat format = DateFormat.getDateTimeInstance();
+                format.setTimeZone(TimeZone.getTimeZone("UTC"));
+                String formattedDate = format.format(fDate);
+
+                time.setText(formattedDate);
+
 
             }
 
